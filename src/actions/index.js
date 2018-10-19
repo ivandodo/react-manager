@@ -3,7 +3,8 @@ import {
   PASSWORD_CHANGED,
   RESET_FORM,
   LOGIN_USER_SUCCESS,
-  LOGIN_USER_FAIL
+  LOGIN_USER_FAIL,
+  LOGIN_USER
 } from './types';
 import firebase from '@firebase/app';
 import '@firebase/auth';
@@ -25,6 +26,8 @@ export const resetForm = () => ({
 
 export const logInUser = ({ email, password }) => {
   return (dispatch) => {
+    dispatch({ type: LOGIN_USER})
+
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(user => loginUserSucess(dispatch, user))
       .catch( () => {

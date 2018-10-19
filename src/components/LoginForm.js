@@ -7,7 +7,7 @@ import {
     resetForm, 
     logInUser 
 } from '../actions';
-import { Card, CardSection, Input, Button } from './common';
+import { Card, CardSection, Input, Button, Spinner } from './common';
 
 export class LoginForm extends Component {
 
@@ -32,6 +32,17 @@ export class LoginForm extends Component {
     } = this.props;
     
     logInUser({email, password});
+  }
+
+  renderLogin(){
+    if (this.props.loading){
+      return <Spinner size='large'/>;
+    }
+    return(
+      <Button onPress={this.onButtonPress.bind(this)}>
+        Log in
+      </Button>
+    );
   }
 
   render() {
@@ -66,9 +77,7 @@ export class LoginForm extends Component {
           {this.renderError()}
 
           <CardSection>
-              <Button onPress={this.onButtonPress.bind(this)}>
-                  Log in
-              </Button>
+              {this.renderLogin()}
           </CardSection>
       </Card>
     )
@@ -87,7 +96,8 @@ const mapStateToProps = (state) => ({
   email: state.auth.email,
   password: state.auth.password,
   error: state.auth.error,
-  user: state.auth.user
+  user: state.auth.user,
+  loading: state.auth.loading,
 })
 
 const mapDispatchToProps = {
