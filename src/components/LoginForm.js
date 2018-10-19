@@ -1,15 +1,47 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import PropTypes from 'prop-types';
+import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, resetForm } from '../actions';
+import { 
+    emailChanged, 
+    passwordChanged, 
+    resetForm, 
+    logInUser 
+} from '../actions';
 import { Card, CardSection, Input, Button } from './common';
 
 export class LoginForm extends Component {
 
+  renderError(){
+    if(this.props.error){
+      return (
+        <View style={{ backgroundColor: 'white' }}>
+          <Text style={styles.errorTextStyle}>
+            {this.props.error}
+          </Text>
+        </View>
+      );
+    }
+  }
+
+  onButtonPress() {
+
+    const {
+      email,
+      password,
+      logInUser
+    } = this.props;
+    
+    logInUser({email, password});
+  }
+
   render() {
 
-    const { email, password, emailChanged, passwordChanged } = this.props;
+    const {
+      email,
+      password,
+      emailChanged,
+      passwordChanged,
+    } = this.props;
 
     return (
       <Card>
@@ -31,9 +63,10 @@ export class LoginForm extends Component {
                 value={password}
             />
           </CardSection>
+          {this.renderError()}
 
           <CardSection>
-              <Button>
+              <Button onPress={this.onButtonPress.bind(this)}>
                   Log in
               </Button>
           </CardSection>
@@ -42,15 +75,26 @@ export class LoginForm extends Component {
   }
 }
 
+const styles = {
+  errorTextStyle: {
+    fontSize: 20,
+    alignSelf: 'center',
+    color: 'red',
+  }
+}
+
 const mapStateToProps = (state) => ({
   email: state.auth.email,
-  password: state.auth.password
+  password: state.auth.password,
+  error: state.auth.error,
+  user: state.auth.user
 })
 
 const mapDispatchToProps = {
   emailChanged,
   passwordChanged,
-  resetForm
+  resetForm,
+  logInUser
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
