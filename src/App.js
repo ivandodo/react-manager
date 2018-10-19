@@ -6,6 +6,7 @@ import reducers from './reducers';
 import firebase from '@firebase/app';
 import '@firebase/auth';
 import config from '../firebase';
+import LoginForm from './components/LoginForm';
 
 export class App extends Component {
 
@@ -18,7 +19,7 @@ export class App extends Component {
     return (
       <Provider store={createStore(reducers)}>
         <View>
-          <Text> textInComponent </Text>
+          <LoginForm />
         </View>
       </Provider>
     )
