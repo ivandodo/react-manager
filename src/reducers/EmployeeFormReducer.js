@@ -1,11 +1,12 @@
 import {
-    EMPLOYEE_UPDATE
+    EMPLOYEE_UPDATE,
+    EMPLOYEE_CREATE
 } from '../actions/types';
 
 const initialState = {
     name: '',
     phone: '',
-    shift: '',
+    shift: 'Monday',
 }
 
 export default (state = initialState, action) => {
@@ -13,6 +14,9 @@ export default (state = initialState, action) => {
 
   case EMPLOYEE_UPDATE:
     return { ...state, [action.payload.prop]: action.payload.value }
+
+  case EMPLOYEE_CREATE:
+    return initialState;
 
   default:
     return state

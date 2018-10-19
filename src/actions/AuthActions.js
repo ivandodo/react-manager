@@ -31,7 +31,8 @@ import {
   
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then(user => loginUserSucess(dispatch, user))
-        .catch( () => {
+        .catch( (error) => {
+          console.log(error);
           firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(user => loginUserSucess(dispatch, user))
             .catch(() => loginUserFail(dispatch));
