@@ -1,4 +1,4 @@
-import { EMPLOYEE_UPDATE, EMPLOYEE_CREATE } from './types';
+import { EMPLOYEE_UPDATE, EMPLOYEE_CREATE, EMPLOYEES_FETCH_SUCCESS } from './types';
 import firebase from '@firebase/app';
 import '@firebase/auth';
 import '@firebase/database';
@@ -13,13 +13,27 @@ export const employeeUpdate = ({ prop, value}) => {
 
 export const employeeCreate = ({ name, phone, shift}) => {
     const { currentUser } = firebase.auth();
-    console.log({ name, phone, shift });
     return (dispatch) => {
         firebase.database().ref(`/users/${currentUser.uid}/employees`)
             .push({ name, phone, shift})
             .then(() => {
                 dispatch({ type: EMPLOYEE_CREATE });
-                Actions.employeeList();
+                Actions.employeeList({ type: 'reset' });
             });
+    }
+}
+
+export const employeesFetch = () => {
+    const { currentUser } = firebase.auth();
+    return (dispatch) => {
+        firebase.database().ref(`/users/${currentUser.uid}/employees`)
+            .on('value', snapshot => {
+                dispatch({ type: EMPLOYEES_FETCH_SUCCESS, payload: snapshot.val() })
+            })
+            // .then(() => {
+            //     dispatch({ type: EMPLOYEE_CREATE });
+            //     Actions.employeeList();
+            // });
+            ;
     }
 }

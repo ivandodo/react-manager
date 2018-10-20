@@ -1,6 +1,6 @@
 import {
     EMPLOYEE_UPDATE,
-    EMPLOYEE_CREATE
+    EMPLOYEE_CREATE,
 } from '../actions/types';
 
 const initialState = {
@@ -17,7 +17,7 @@ export default (state = initialState, action) => {
 
   case EMPLOYEE_CREATE:
     return initialState;
-
+    
   default:
     return state
   }
