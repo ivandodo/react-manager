@@ -2,7 +2,7 @@ import {
     EMPLOYEE_UPDATE, 
     EMPLOYEE_CREATE, 
     EMPLOYEES_FETCH_SUCCESS, 
-    EMPLOYEE_SAVE_SUCCESS 
+    EMPLOYEE_SAVE_SUCCESS,
 } from './types';
 import firebase from '@firebase/app';
 import '@firebase/auth';
@@ -48,4 +48,23 @@ export const employeeEdit = ({ name, phone, shift, uid }) => {
                 Actions.employeeList({ type: 'reset' });
             });
     }
+}
+
+export const employeeDelete = ({ uid }) => {
+    const { currentUser } = firebase.auth();
+    return (dispatch) => {
+        firebase.database().ref(`/users/${currentUser.uid}/employees/${uid}`)
+            .remove()
+            .then(() => {
+                dispatch({ type: EMPLOYEE_SAVE_SUCCESS });
+                Actions.employeeList({ type: 'reset' });
+            });
+    }
+}
+
+
+export const employeeClear = () => {
+    return ({
+        type: EMPLOYEE_SAVE_SUCCESS,
+    })
 }

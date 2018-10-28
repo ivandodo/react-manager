@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { Card, CardSection, Button } from './common';
 import { connect } from 'react-redux';
-import { employeeUpdate, employeeCreate } from '../actions';
+import { employeeCreate, employeeClear } from '../actions';
 import EmployeeForm from './EmployeeForm';
 
 class EmployeeCreate extends Component {
+  
+  componentWillUnmount = () => {
+    this.props.employeeClear();
+  }
+
   render() {
 
     const { name, phone, shift, employeeCreate } = this.props;
@@ -31,8 +36,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  employeeUpdate,
-  employeeCreate
+  employeeCreate,
+  employeeClear
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeCreate);

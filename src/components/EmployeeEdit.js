@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
-import { Card, CardSection, Button } from './common';
+import { Card, CardSection, Button, Confirm } from './common';
 import { connect } from 'react-redux';
-import { employeeUpdate, employeeEdit } from '../actions';
+import { employeeUpdate, employeeEdit, employeeDelete, employeeClear } from '../actions';
 import EmployeeForm from './EmployeeForm';
 import _ from 'lodash';
 import { text } from 'react-native-communications';
 
 class EmployeeEdit extends Component {
 
+  state = {
+      showModal: false,
+  }
+
   componentWillMount = () => {
     _.each(this.props.employee, (value, prop) => {
         this.props.employeeUpdate( { prop, value} );
     });
+  }
+  
+  componentWillUnmount = () => {
+    this.props.employeeClear();
   }
   
 
@@ -44,11 +52,18 @@ class EmployeeEdit extends Component {
 
             <CardSection>
                 <Button
-                    onPress={() => {}}
+                    onPress={() => this.setState({ showModal: !this.state.showModal0 })}
                 >
                     Fire
                 </Button>                
             </CardSection>
+            <Confirm
+                visible={this.state.showModal}
+                onAccept={() => this.props.employeeDelete(this.props.employee)}
+                onDecline={()=>this.setState({ showModal: false })}
+            >
+                Are you sure you want to fire employee?
+            </Confirm>
         </Card>
     )
   }
@@ -62,7 +77,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   employeeUpdate,
-  employeeEdit
+  employeeEdit,
+  employeeDelete,
+  employeeClear
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeEdit);
